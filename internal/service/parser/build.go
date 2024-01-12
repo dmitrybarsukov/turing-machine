@@ -96,6 +96,20 @@ func buildCompareValidators(data *yamlValidatorCompare) ([]domain.Validator, err
 		return validator.AnyItemsPairCompared(), nil
 	}
 
+	if data.AnyItem {
+		targetNumber, err := strconv.Atoi(data.Target)
+		if err != nil {
+			return nil, err
+		}
+
+		compare, err := parseEnum(data.Compare, mappingCompare)
+		if err != nil {
+			return nil, err
+		}
+
+		return validator.AnyItemComparedToConst(compare, targetNumber), nil
+	}
+
 	return nil, errors.New("comparator has nothing to compare")
 }
 

@@ -221,3 +221,15 @@ func HasAnySequence() []domain.Validator {
 		}
 	})
 }
+
+// AnyItemComparedToConst
+// Одно из чисел (▲,■,●) соотносится с константой как указано
+func AnyItemComparedToConst(compare Compare, constant int) []domain.Validator {
+	return util.Combine1(codeItemVariants, func(item domain.CodeItem) domain.Validator {
+		return constComparator{
+			Item:    item,
+			Const:   constant,
+			Compare: compare,
+		}
+	})
+}

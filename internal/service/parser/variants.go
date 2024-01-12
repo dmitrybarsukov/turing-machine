@@ -17,6 +17,12 @@ var mappingParity = map[string]validator.Parity{
 	"odd":  validator.Odd,
 }
 
+var mappingCompare = map[string]validator.Compare{
+	"less":  validator.Less,
+	"equal": validator.Equal,
+	"more":  validator.More,
+}
+
 func parseEnum[T comparable](value string, mapping map[string]T) (T, error) {
 	item, ok := mapping[value]
 	if !ok {

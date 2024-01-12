@@ -24,6 +24,8 @@ type yamlValidatorCompare struct {
 	Sum     []string `yaml:"sum"`
 	Target  string   `yaml:"target"`
 	AnyPair bool     `yaml:"any_pair"`
+	AnyItem bool     `yaml:"any_item"`
+	Compare string   `yaml:"compare"`
 }
 
 type yamlValidatorCount struct {
