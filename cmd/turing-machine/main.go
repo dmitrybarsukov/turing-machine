@@ -121,16 +121,22 @@ func recommendCode(machines []turing.Machine, validatorStats []analyze.Validator
 }
 
 func recommendValidator(validatorStats []analyze.ValidatorStats, tests []parser.Test) {
-	stats := make([]analyze.ValidatorStats, len(validatorStats))
-	copy(stats, validatorStats)
+	lastUsedValidators := make(map[rune]bool)
+	const analyzeLastTests = 3
+	for i := 0; i < analyzeLastTests && i < len(tests); i++ {
+		lastUsedValidators[tests[len(tests)-1-i].Validator] = true
+	}
+
+	stats := lo.Filter(validatorStats, func(stats analyze.ValidatorStats, _ int) bool {
+		return !lastUsedValidators[stats.Key]
+	})
 	sort.Slice(stats, func(i, j int) bool {
 		return stats[i].Confidence < stats[j].Confidence
 	})
-
-	leastConfident := stats[0]
-	if len(tests) > 0 && tests[len(tests)-1].Validator == leastConfident.Key {
-		leastConfident = stats[1]
+	if len(stats) > 0 {
+		fmt.Printf("Check validator %c\n", stats[0].Key)
+	} else {
+		fmt.Printf("Can't recommend which validator to check")
 	}
 
-	fmt.Printf("Check validator %c\n", leastConfident.Key)
 }
