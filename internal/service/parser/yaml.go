@@ -10,7 +10,6 @@ type yamlValidator struct {
 	Count           *yamlValidatorCount   `yaml:"count"`
 	Parity          *yamlValidatorParity  `yaml:"parity"`
 	MajorParity     bool                  `yaml:"major_parity"`
-	HasRepetitions  bool                  `yaml:"has_repetitions"`
 	HasPair         bool                  `yaml:"has_pair"`
 	GreatestItem    bool                  `yaml:"greatest_item"`
 	LeastItem       bool                  `yaml:"least_item"`
@@ -29,12 +28,14 @@ type yamlValidatorCompare struct {
 }
 
 type yamlValidatorCount struct {
-	Number int    `yaml:"number"`
-	Parity string `yaml:"parity"`
-	OneOf  []int  `yaml:"one_of"`
+	Number      int    `yaml:"number"`
+	Parity      string `yaml:"parity"`
+	OneOf       []int  `yaml:"one_of"`
+	Repetitions bool   `yaml:"repetitions"`
 }
 
 type yamlValidatorParity struct {
-	Item string `yaml:"item"`
-	Sum  bool   `yaml:"sum"`
+	Item    string `yaml:"item"`
+	Sum     bool   `yaml:"sum"`
+	AnyItem bool   `yaml:"any_item"`
 }

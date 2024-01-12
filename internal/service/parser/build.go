@@ -25,10 +25,6 @@ func buildValidators(val yamlValidator) ([]domain.Validator, error) {
 		return validator.HasMajorParity(), nil
 	}
 
-	if val.HasRepetitions {
-		return validator.CountOfRepetitions(), nil
-	}
-
 	if val.HasPair {
 		return validator.PairOfNumbersExist(), nil
 	}
@@ -135,6 +131,10 @@ func buildCountValidators(data *yamlValidatorCount) ([]domain.Validator, error) 
 		return validator.CountOfAnyNumber(data.OneOf...), nil
 	}
 
+	if data.Repetitions {
+		return validator.CountOfRepetitions(), nil
+	}
+
 	return nil, errors.New("counter has nothing to count")
 }
 
@@ -150,6 +150,10 @@ func buildParityValidators(data *yamlValidatorParity) ([]domain.Validator, error
 
 	if data.Sum {
 		return validator.SumHasParity(), nil
+	}
+
+	if data.AnyItem {
+		return validator.AnyItemParity(), nil
 	}
 
 	return nil, errors.New("parity checker has nothing to check")

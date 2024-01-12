@@ -199,6 +199,18 @@ func SumHasParity() []domain.Validator {
 	})
 }
 
+// AnyItemParity
+// Одно из чисел (▲,■,●) четное или нечётное
+func AnyItemParity() []domain.Validator {
+	variants := []Parity{Even, Odd}
+	return util.Combine2(codeItemVariants, variants, func(item domain.CodeItem, parity Parity) domain.Validator {
+		return itemParityChecker{
+			Item:   item,
+			Parity: parity,
+		}
+	})
+}
+
 // HasSequence
 // / В коде (есть,нет) пара или больше последовательных чисел в указанном порядке
 func HasSequence(order Order) []domain.Validator {
