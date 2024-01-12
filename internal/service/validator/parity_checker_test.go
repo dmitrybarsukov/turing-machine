@@ -5,9 +5,9 @@ import (
 	"turing-machine/internal/domain"
 )
 
-func TestParityChecker(t *testing.T) {
+func TestItemParityChecker(t *testing.T) {
 	t.Run("[0] is even", func(t *testing.T) {
-		tt := newTester(t, itemParityChecker{Item: domain.CodeItem0, result: Even})
+		tt := newTester(t, itemParityChecker{Item: domain.CodeItem0, Parity: Even})
 
 		tt.test(155, false)
 		tt.test(322, false)
@@ -17,7 +17,7 @@ func TestParityChecker(t *testing.T) {
 	})
 
 	t.Run("[2] is odd", func(t *testing.T) {
-		tt := newTester(t, itemParityChecker{Item: domain.CodeItem2, result: Odd})
+		tt := newTester(t, itemParityChecker{Item: domain.CodeItem2, Parity: Odd})
 
 		tt.test(155, true)
 		tt.test(322, false)
@@ -29,7 +29,7 @@ func TestParityChecker(t *testing.T) {
 
 func TestSumParityChecker(t *testing.T) {
 	t.Run("sum is even", func(t *testing.T) {
-		tt := newTester(t, sumParityChecker{result: Even})
+		tt := newTester(t, sumParityChecker{Parity: Even})
 
 		tt.test(155, false)
 		tt.test(323, true)
@@ -39,7 +39,7 @@ func TestSumParityChecker(t *testing.T) {
 	})
 
 	t.Run("sum is odd", func(t *testing.T) {
-		tt := newTester(t, sumParityChecker{result: Odd})
+		tt := newTester(t, sumParityChecker{Parity: Odd})
 
 		tt.test(555, true)
 		tt.test(322, true)

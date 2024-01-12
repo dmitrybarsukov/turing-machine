@@ -1,25 +1,5 @@
 package validator
 
-import (
-	"turing-machine/internal/domain"
-
-	"github.com/samber/lo"
-)
-
-type validatorWithValue[T any] interface {
-	domain.Validator
-	WithValue(value T) domain.Validator
-}
-
-func makeValidators[T any](
-	base validatorWithValue[T],
-	variants []T,
-) []domain.Validator {
-	return lo.Map(variants, func(it T, _ int) domain.Validator {
-		return base.WithValue(it)
-	})
-}
-
 func compare(value1, value2 int) Compare {
 	if value1 < value2 {
 		return Less
@@ -30,7 +10,7 @@ func compare(value1, value2 int) Compare {
 	}
 }
 
-func getOrder(arr []int) Order {
+func getOrderStrict(arr []int) Order {
 	var isAsc, isDesc = true, true
 	for i := 0; i < len(arr)-1; i++ {
 		if arr[i] <= arr[i+1] {

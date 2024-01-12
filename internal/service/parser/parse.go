@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"io"
 	"turing-machine/internal/domain"
-	"turing-machine/internal/domain/turing"
+	"turing-machine/internal/service/turing"
 	"unicode"
 
 	"gopkg.in/yaml.v3"

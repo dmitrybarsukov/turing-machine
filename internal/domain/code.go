@@ -1,9 +1,11 @@
 package domain
 
 import (
-	"fmt"
 	"strconv"
 	"strings"
+	"turing-machine/internal/util"
+
+	"github.com/samber/lo"
 )
 
 type CodeItem int
@@ -52,7 +54,14 @@ func (c Code) String() string {
 	return builder.String()
 }
 
-type Validator interface {
-	Validate(code Code) bool
-	fmt.Stringer
+var AllCodes []Code
+
+func init() {
+	digits := []int{1, 2, 3, 4, 5}
+	allCombinations := util.Combinations(digits, CodeLength)
+	AllCodes = lo.Map(allCombinations, func(it []int, _ int) Code {
+		var code Code
+		copy(code[:], it)
+		return code
+	})
 }

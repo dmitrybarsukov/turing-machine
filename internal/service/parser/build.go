@@ -4,7 +4,7 @@ import (
 	"errors"
 	"strconv"
 	"turing-machine/internal/domain"
-	"turing-machine/internal/domain/validator"
+	"turing-machine/internal/service/validator"
 )
 
 func buildValidators(val yamlValidator) ([]domain.Validator, error) {
@@ -21,11 +21,11 @@ func buildValidators(val yamlValidator) ([]domain.Validator, error) {
 	}
 
 	if val.HasMoreParity {
-		return validator.HasMoreNumbersWithParity(), nil
+		return validator.HasMajorParity(), nil
 	}
 
 	if val.HasRepetitions {
-		return validator.HasSomeRepeatingNumbers(), nil
+		return validator.CountOfRepetitions(), nil
 	}
 
 	if val.HasPair {
@@ -33,19 +33,19 @@ func buildValidators(val yamlValidator) ([]domain.Validator, error) {
 	}
 
 	if val.GreatestItem {
-		return validator.OneItemIsGreater(), nil
+		return validator.ItemIsGreatest(), nil
 	}
 
 	if val.LeastItem {
-		return validator.OneItemIsLess(), nil
+		return validator.ItemIsLeast(), nil
 	}
 
-	if val.OutlierItem {
-		return validator.OneItemIsOutlier(), nil
+	if val.OutstandingItem {
+		return validator.ItemIsOutstanding(), nil
 	}
 
 	if val.HasOrder {
-		return validator.CodeIsOrdered(), nil
+		return validator.CodeHasOrder(), nil
 	}
 
 	return nil, errors.New("validator not specified")
@@ -87,8 +87,8 @@ func buildCompareValidators(data *yamlValidatorCompare) ([]domain.Validator, err
 		return nil, errors.New("failed to recognize target")
 	}
 
-	if data.Multi {
-		return validator.ItemsMultiComparable(), nil
+	if data.AnyPair {
+		return validator.AnyItemsPairCompared(), nil
 	}
 
 	return nil, errors.New("comparator has nothing to compare")
@@ -108,12 +108,12 @@ func buildCountValidators(data *yamlValidatorCount) ([]domain.Validator, error) 
 		return validator.CountOfParity(parity), nil
 	}
 
-	if len(data.OneOfNumbers) > 0 {
-		if len(data.OneOfNumbers) != 2 {
-			return nil, errors.New("one_of_numbers should contain two elements")
+	if len(data.OneOf) > 0 {
+		if len(data.OneOf) != 2 {
+			return nil, errors.New("one_of should contain two elements")
 		}
 
-		return validator.CountOfNumberOfOneOfTwo(data.OneOfNumbers[0], data.OneOfNumbers[1]), nil
+		return validator.CountOfAnyNumber(data.OneOf...), nil
 	}
 
 	return nil, errors.New("counter has nothing to count")

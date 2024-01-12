@@ -6,8 +6,8 @@ import (
 	"sort"
 	"turing-machine/internal/analyze"
 	"turing-machine/internal/domain"
-	"turing-machine/internal/domain/turing"
-	"turing-machine/internal/parser"
+	"turing-machine/internal/service/parser"
+	"turing-machine/internal/service/turing"
 
 	"github.com/samber/lo"
 )

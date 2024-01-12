@@ -3,7 +3,7 @@ package parser
 import (
 	"fmt"
 	"turing-machine/internal/domain"
-	"turing-machine/internal/domain/validator"
+	"turing-machine/internal/service/validator"
 )
 
 var mappingCodeItem = map[string]domain.CodeItem{
