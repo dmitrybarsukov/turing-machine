@@ -57,21 +57,22 @@ func ItemComparedToOtherItem(item1, item2 domain.CodeItem) []domain.Validator {
 }
 
 type itemsSumComparator struct {
-	Items []domain.CodeItem
-	Sum   int
+	Items       [domain.CodeLength]domain.CodeItem
+	ArrayLength int
+	Sum         int
 
 	result Compare
 }
 
 func (c itemsSumComparator) Validate(code domain.Code) bool {
-	sum := lo.SumBy[domain.CodeItem, int](c.Items, func(item domain.CodeItem) int {
+	sum := lo.SumBy[domain.CodeItem, int](c.Items[:c.ArrayLength], func(item domain.CodeItem) int {
 		return code.Get(item)
 	})
 	return compare(sum, c.Sum) == c.result
 }
 
 func (c itemsSumComparator) String() string {
-	itemStrs := lo.Map(c.Items, func(it domain.CodeItem, _ int) string {
+	itemStrs := lo.Map(c.Items[:c.ArrayLength], func(it domain.CodeItem, _ int) string {
 		return it.String()
 	})
 	return fmt.Sprintf("%s %v %v", strings.Join(itemStrs, " + "), c.result, c.Sum)
@@ -83,7 +84,10 @@ func (c itemsSumComparator) WithValue(value Compare) domain.Validator {
 }
 
 func ItemsSumComparedToConst(items []domain.CodeItem, sum int) []domain.Validator {
-	return makeValidators[Compare](itemsSumComparator{Items: items, Sum: sum}, compareVariants)
+	comp := itemsSumComparator{Sum: sum}
+	copy(comp.Items[:], items)
+	comp.ArrayLength = len(items)
+	return makeValidators[Compare](comp, compareVariants)
 }
 
 func ItemsMultiComparable() []domain.Validator {

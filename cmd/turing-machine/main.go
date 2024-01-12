@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"sort"
 	"turing-machine/internal/analyze"
 	"turing-machine/internal/domain"
 	"turing-machine/internal/domain/turing"
@@ -74,7 +75,7 @@ func run(fileName string) error {
 	if len(result.Tests)%3 == 0 {
 		recommendCode(machines, validatorStats)
 	}
-	recommendValidator(machines, validatorStats)
+	recommendValidator(validatorStats, result.Tests)
 
 	fmt.Println()
 
@@ -119,10 +120,17 @@ func recommendCode(machines []turing.Machine, validatorStats []analyze.Validator
 	fmt.Printf("Try code %v\n", machines[0].Solution())
 }
 
-func recommendValidator(_ []turing.Machine, validatorStats []analyze.ValidatorStats) {
-	leastConfident := lo.MinBy(validatorStats, func(stats, stats2 analyze.ValidatorStats) bool {
-		return stats.Confidence < stats2.Confidence
+func recommendValidator(validatorStats []analyze.ValidatorStats, tests []parser.Test) {
+	stats := make([]analyze.ValidatorStats, len(validatorStats))
+	copy(stats, validatorStats)
+	sort.Slice(stats, func(i, j int) bool {
+		return stats[i].Confidence < stats[j].Confidence
 	})
+
+	leastConfident := stats[0]
+	if len(tests) > 0 && tests[len(tests)-1].Validator == leastConfident.Key {
+		leastConfident = stats[1]
+	}
 
 	fmt.Printf("Check validator %c\n", leastConfident.Key)
 }

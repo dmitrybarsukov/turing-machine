@@ -96,9 +96,10 @@ func TestItemComparator(t *testing.T) {
 func TestItemsSumComparator(t *testing.T) {
 	t.Run("[0] + [1] < 6", func(t *testing.T) {
 		tt := newTester(t, itemsSumComparator{
-			Items:  []domain.CodeItem{domain.CodeItem0, domain.CodeItem1},
-			Sum:    6,
-			result: Less,
+			Items:       [domain.CodeLength]domain.CodeItem{domain.CodeItem0, domain.CodeItem1},
+			ArrayLength: 2,
+			Sum:         6,
+			result:      Less,
 		})
 
 		tt.test(155, false)
@@ -110,9 +111,10 @@ func TestItemsSumComparator(t *testing.T) {
 
 	t.Run("[0] + [1] + [2] > 10", func(t *testing.T) {
 		tt := newTester(t, itemsSumComparator{
-			Items:  []domain.CodeItem{domain.CodeItem0, domain.CodeItem1, domain.CodeItem2},
-			Sum:    10,
-			result: More,
+			Items:       [domain.CodeLength]domain.CodeItem{domain.CodeItem0, domain.CodeItem1, domain.CodeItem2},
+			ArrayLength: 3,
+			Sum:         10,
+			result:      More,
 		})
 
 		tt.test(155, true)
