@@ -28,8 +28,8 @@ func (c constComparator) WithValue(value Compare) domain.Validator {
 	return c
 }
 
-func ItemComparedToConst(item domain.CodeItem, constant int, variants []Compare) []domain.Validator {
-	return makeValidators[Compare](constComparator{Item: item, Const: constant}, variants)
+func ItemComparedToConst(item domain.CodeItem, constant int) []domain.Validator {
+	return makeValidators[Compare](constComparator{Item: item, Const: constant}, compareVariants)
 }
 
 type itemComparator struct {
@@ -52,8 +52,8 @@ func (c itemComparator) WithValue(value Compare) domain.Validator {
 	return c
 }
 
-func ItemComparedToOtherItem(item1, item2 domain.CodeItem, variants []Compare) []domain.Validator {
-	return makeValidators[Compare](itemComparator{Item1: item1, Item2: item2}, variants)
+func ItemComparedToOtherItem(item1, item2 domain.CodeItem) []domain.Validator {
+	return makeValidators[Compare](itemComparator{Item1: item1, Item2: item2}, compareVariants)
 }
 
 type itemsSumComparator struct {
@@ -82,6 +82,14 @@ func (c itemsSumComparator) WithValue(value Compare) domain.Validator {
 	return c
 }
 
-func ItemsSumComparedToConst(items []domain.CodeItem, sum int, variants []Compare) []domain.Validator {
-	return makeValidators[Compare](itemsSumComparator{Items: items, Sum: sum}, variants)
+func ItemsSumComparedToConst(items []domain.CodeItem, sum int) []domain.Validator {
+	return makeValidators[Compare](itemsSumComparator{Items: items, Sum: sum}, compareVariants)
+}
+
+func ItemsMultiComparable() []domain.Validator {
+	return lo.Flatten([][]domain.Validator{
+		ItemComparedToOtherItem(domain.CodeItemTriangle, domain.CodeItemSquare),
+		ItemComparedToOtherItem(domain.CodeItemSquare, domain.CodeItemCircle),
+		ItemComparedToOtherItem(domain.CodeItemCircle, domain.CodeItemTriangle),
+	})
 }

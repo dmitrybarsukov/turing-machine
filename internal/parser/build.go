@@ -7,41 +7,45 @@ import (
 	"turing-machine/internal/domain/validator"
 )
 
-func buildValidators(validator yamlValidator) ([]domain.Validator, error) {
-	if validator.Compare != nil {
-		return buildCompareValidators(validator.Compare)
+func buildValidators(val yamlValidator) ([]domain.Validator, error) {
+	if val.Compare != nil {
+		return buildCompareValidators(val.Compare)
 	}
 
-	if validator.Counter != nil {
-		return buildCounterValidators(validator.Counter)
+	if val.Count != nil {
+		return buildCountValidators(val.Count)
 	}
 
-	if validator.Parity != nil {
-		return buildParityValidators(validator.Parity)
+	if val.Parity != nil {
+		return buildParityValidators(val.Parity)
 	}
 
-	if validator.HasMoreParity {
-		return buildHasMoreParityValidators()
+	if val.HasMoreParity {
+		return validator.HasMoreNumbersWithParity(), nil
 	}
 
-	if validator.HasRepetitions {
-		return buildHasRepetitionsValidators()
+	if val.HasRepetitions {
+		return validator.HasSomeRepeatingNumbers(), nil
 	}
 
-	if validator.HasPair {
-		return buildHasPairValidators()
+	if val.HasPair {
+		return validator.PairOfNumbersExist(), nil
 	}
 
-	if validator.GreatestItem {
-		return buildGreatestItemValidators()
+	if val.GreatestItem {
+		return validator.OneItemIsGreater(), nil
 	}
 
-	if validator.LeastItem {
-		return buildLeastItemValidators()
+	if val.LeastItem {
+		return validator.OneItemIsLess(), nil
 	}
 
-	if validator.HasOrder {
-		return buildHasOrderValidators()
+	if val.OutlierItem {
+		return validator.OneItemIsOutlier(), nil
+	}
+
+	if val.HasOrder {
+		return validator.CodeIsOrdered(), nil
 	}
 
 	return nil, errors.New("validator not specified")
@@ -55,11 +59,11 @@ func buildCompareValidators(data *yamlValidatorCompare) ([]domain.Validator, err
 		}
 
 		if targetItem, err := parseEnum(data.Target, mappingCodeItem); err == nil {
-			return validator.ItemComparedToOtherItem(item, targetItem, allCompare), nil
+			return validator.ItemComparedToOtherItem(item, targetItem), nil
 		}
 
 		if targetNumber, err := strconv.Atoi(data.Target); err == nil {
-			return validator.ItemComparedToConst(item, targetNumber, allCompare), nil
+			return validator.ItemComparedToConst(item, targetNumber), nil
 		}
 
 		return nil, errors.New("failed to recognize target")
@@ -77,18 +81,22 @@ func buildCompareValidators(data *yamlValidatorCompare) ([]domain.Validator, err
 		}
 
 		if targetNumber, err := strconv.Atoi(data.Target); err == nil {
-			return validator.ItemsSumComparedToConst(items, targetNumber, allCompare), nil
+			return validator.ItemsSumComparedToConst(items, targetNumber), nil
 		}
 
 		return nil, errors.New("failed to recognize target")
 	}
 
+	if data.Multi {
+		return validator.ItemsMultiComparable(), nil
+	}
+
 	return nil, errors.New("comparator has nothing to compare")
 }
 
-func buildCounterValidators(data *yamlValidatorCounter) ([]domain.Validator, error) {
+func buildCountValidators(data *yamlValidatorCount) ([]domain.Validator, error) {
 	if data.Number != 0 {
-		return validator.CountOfNumber(data.Number, allCount), nil
+		return validator.CountOfNumber(data.Number), nil
 	}
 
 	if data.Parity != "" {
@@ -97,7 +105,15 @@ func buildCounterValidators(data *yamlValidatorCounter) ([]domain.Validator, err
 			return nil, err
 		}
 
-		return validator.CountOfParity(parity, allCount), nil
+		return validator.CountOfParity(parity), nil
+	}
+
+	if len(data.OneOfNumbers) > 0 {
+		if len(data.OneOfNumbers) != 2 {
+			return nil, errors.New("one_of_numbers should contain two elements")
+		}
+
+		return validator.CountOfNumberOfOneOfTwo(data.OneOfNumbers[0], data.OneOfNumbers[1]), nil
 	}
 
 	return nil, errors.New("counter has nothing to count")
@@ -110,36 +126,12 @@ func buildParityValidators(data *yamlValidatorParity) ([]domain.Validator, error
 			return nil, err
 		}
 
-		return validator.ItemHasParity(item, allParity), nil
+		return validator.ItemHasParity(item), nil
 	}
 
 	if data.Sum {
-		return validator.SumHasParity(allParity), nil
+		return validator.SumHasParity(), nil
 	}
 
 	return nil, errors.New("parity checker has nothing to check")
-}
-
-func buildHasMoreParityValidators() ([]domain.Validator, error) {
-	return validator.HasMoreNumbersWithParity(allParity), nil
-}
-
-func buildHasRepetitionsValidators() ([]domain.Validator, error) {
-	return validator.HasSomeRepeatingNumbers(allCount), nil
-}
-
-func buildHasPairValidators() ([]domain.Validator, error) {
-	return validator.PairOfNumbersExist(allBool), nil
-}
-
-func buildGreatestItemValidators() ([]domain.Validator, error) {
-	return validator.OneItemIsDifferent(validator.More, allCodeItem), nil
-}
-
-func buildLeastItemValidators() ([]domain.Validator, error) {
-	return validator.OneItemIsDifferent(validator.Less, allCodeItem), nil
-}
-
-func buildHasOrderValidators() ([]domain.Validator, error) {
-	return validator.CodeIsOrdered(allOrder), nil
 }

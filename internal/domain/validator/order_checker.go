@@ -22,6 +22,6 @@ func (c orderChecker) WithValue(value Order) domain.Validator {
 	return c
 }
 
-func CodeIsOrdered(variants []Order) []domain.Validator {
-	return makeValidators[Order](orderChecker{}, variants)
+func CodeIsOrdered() []domain.Validator {
+	return makeValidators[Order](orderChecker{}, orderVariants)
 }

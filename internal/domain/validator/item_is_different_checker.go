@@ -37,6 +37,14 @@ func (c itemIsDifferentChecker) WithValue(value domain.CodeItem) domain.Validato
 	return c
 }
 
-func OneItemIsDifferent(compareResult Compare, variants []domain.CodeItem) []domain.Validator {
-	return makeValidators[domain.CodeItem](itemIsDifferentChecker{Result: compareResult}, variants)
+func OneItemIsGreater() []domain.Validator {
+	return makeValidators[domain.CodeItem](itemIsDifferentChecker{Result: More}, codeItemVariants)
+}
+
+func OneItemIsLess() []domain.Validator {
+	return makeValidators[domain.CodeItem](itemIsDifferentChecker{Result: Less}, codeItemVariants)
+}
+
+func OneItemIsOutlier() []domain.Validator {
+	return append(OneItemIsGreater(), OneItemIsLess()...)
 }

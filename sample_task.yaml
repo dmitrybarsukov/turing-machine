@@ -22,15 +22,15 @@ circleParity: &circleParity
     item: circle
 
 countOf1: &countOf1
-  counter:
+  count:
     number: 1
 
 countOf3: &countOf3
-  counter:
+  count:
     number: 3
 
 countOf4: &countOf4
-  counter:
+  count:
     number: 4
 
 oneGreaterThanOther: &oneGreaterThanOther
@@ -40,7 +40,7 @@ oneLessThanOther: &oneLessThanOther
   least_item: true
 
 countOfEven: &countOfEven
-  counter:
+  count:
     parity: even
 
 totalSumParity: &totalSumParity

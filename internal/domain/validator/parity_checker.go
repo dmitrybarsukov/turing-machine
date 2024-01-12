@@ -26,8 +26,8 @@ func (c itemParityChecker) WithValue(value Parity) domain.Validator {
 	return c
 }
 
-func ItemHasParity(item domain.CodeItem, variants []Parity) []domain.Validator {
-	return makeValidators[Parity](itemParityChecker{Item: item}, variants)
+func ItemHasParity(item domain.CodeItem) []domain.Validator {
+	return makeValidators[Parity](itemParityChecker{Item: item}, parityVariants)
 }
 
 type sumParityChecker struct {
@@ -49,6 +49,6 @@ func (c sumParityChecker) WithValue(value Parity) domain.Validator {
 	return c
 }
 
-func SumHasParity(variants []Parity) []domain.Validator {
-	return makeValidators[Parity](sumParityChecker{}, variants)
+func SumHasParity() []domain.Validator {
+	return makeValidators[Parity](sumParityChecker{}, parityVariants)
 }

@@ -26,10 +26,10 @@ func (c countOfNumberChecker) WithValue(value int) domain.Validator {
 	return c
 }
 
-func CountOfNumber(value int, variants []int) []domain.Validator {
+func CountOfNumber(value int) []domain.Validator {
 	return makeValidators[int](countOfNumberChecker{
 		Number: value,
-	}, variants)
+	}, countVariants)
 }
 
 type countOfParityChecker struct {
@@ -53,10 +53,10 @@ func (c countOfParityChecker) WithValue(value int) domain.Validator {
 	return c
 }
 
-func CountOfParity(parity Parity, variants []int) []domain.Validator {
+func CountOfParity(parity Parity) []domain.Validator {
 	return makeValidators[int](countOfParityChecker{
 		Parity: parity,
-	}, variants)
+	}, countVariants)
 }
 
 type parityCountComparator struct {
@@ -80,8 +80,8 @@ func (c parityCountComparator) WithValue(value Parity) domain.Validator {
 	return c
 }
 
-func HasMoreNumbersWithParity(variants []Parity) []domain.Validator {
-	return makeValidators[Parity](parityCountComparator{}, variants)
+func HasMoreNumbersWithParity() []domain.Validator {
+	return makeValidators[Parity](parityCountComparator{}, parityVariants)
 }
 
 type repetitionCounter struct {
@@ -98,7 +98,7 @@ func (c repetitionCounter) Validate(code domain.Code) bool {
 	}))
 	repCount := maxCount - 1
 
-	return repCount == int(c.result)
+	return repCount == c.result
 }
 
 func (c repetitionCounter) String() string {
@@ -114,8 +114,8 @@ func (c repetitionCounter) WithValue(value int) domain.Validator {
 	return c
 }
 
-func HasSomeRepeatingNumbers(variants []int) []domain.Validator {
-	return makeValidators[int](repetitionCounter{}, variants)
+func HasSomeRepeatingNumbers() []domain.Validator {
+	return makeValidators[int](repetitionCounter{}, repetitionVariants)
 }
 
 type hasPairOfSameNumbersChecker struct {
@@ -147,6 +147,10 @@ func (c hasPairOfSameNumbersChecker) WithValue(value bool) domain.Validator {
 	return c
 }
 
-func PairOfNumbersExist(variants []bool) []domain.Validator {
-	return makeValidators[bool](hasPairOfSameNumbersChecker{}, variants)
+func PairOfNumbersExist() []domain.Validator {
+	return makeValidators[bool](hasPairOfSameNumbersChecker{}, boolVariants)
+}
+
+func CountOfNumberOfOneOfTwo(value1, value2 int) []domain.Validator {
+	return append(CountOfNumber(value1), CountOfNumber(value2)...)
 }

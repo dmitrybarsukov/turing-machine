@@ -49,10 +49,6 @@ const (
 	Odd
 )
 
-func (p Parity) not() Parity {
-	return 1 - p
-}
-
 func (p Parity) String() string {
 	switch p {
 	case Even:
