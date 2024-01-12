@@ -36,3 +36,14 @@ func getOrderStrict(arr []int) Order {
 func getParity(value int) Parity {
 	return []Parity{Even, Odd}[value%2]
 }
+
+func getExpectedSequenceDiff(order Order) int {
+	diff := 0
+	if order == Ascending {
+		diff = 1
+	} else if order == Descending {
+		diff = -1
+	}
+
+	return diff
+}

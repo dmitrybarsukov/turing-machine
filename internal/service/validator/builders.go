@@ -198,3 +198,26 @@ func SumHasParity() []domain.Validator {
 		}
 	})
 }
+
+// HasSequence
+// / В коде (есть,нет) пара или больше последовательных чисел в указанном порядке
+func HasSequence(order Order) []domain.Validator {
+	variants := []bool{false, true}
+	return util.Combine1(variants, func(result bool) domain.Validator {
+		return hasSequenceChecker{
+			Order:  order,
+			Result: result,
+		}
+	})
+}
+
+// HasAnySequence
+// В коде (есть,нет) пара или больше последовательных чисел в любом порядке
+func HasAnySequence() []domain.Validator {
+	variants := []bool{false, true}
+	return util.Combine1(variants, func(result bool) domain.Validator {
+		return hasAnySequenceChecker{
+			Result: result,
+		}
+	})
+}

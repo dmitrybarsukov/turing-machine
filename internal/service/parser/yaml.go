@@ -9,13 +9,14 @@ type yamlValidator struct {
 	Compare         *yamlValidatorCompare `yaml:"compare"`
 	Count           *yamlValidatorCount   `yaml:"count"`
 	Parity          *yamlValidatorParity  `yaml:"parity"`
-	HasMoreParity   bool                  `yaml:"has_more_parity"`
+	MajorParity     bool                  `yaml:"major_parity"`
 	HasRepetitions  bool                  `yaml:"has_repetitions"`
 	HasPair         bool                  `yaml:"has_pair"`
 	GreatestItem    bool                  `yaml:"greatest_item"`
 	LeastItem       bool                  `yaml:"least_item"`
 	OutstandingItem bool                  `yaml:"outstanding_item"`
 	HasOrder        bool                  `yaml:"has_order"`
+	HasSequence     string                `yaml:"has_sequence"`
 }
 
 type yamlValidatorCompare struct {

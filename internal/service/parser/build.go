@@ -2,6 +2,7 @@ package parser
 
 import (
 	"errors"
+	"fmt"
 	"strconv"
 	"turing-machine/internal/domain"
 	"turing-machine/internal/service/validator"
@@ -20,7 +21,7 @@ func buildValidators(val yamlValidator) ([]domain.Validator, error) {
 		return buildParityValidators(val.Parity)
 	}
 
-	if val.HasMoreParity {
+	if val.MajorParity {
 		return validator.HasMajorParity(), nil
 	}
 
@@ -46,6 +47,10 @@ func buildValidators(val yamlValidator) ([]domain.Validator, error) {
 
 	if val.HasOrder {
 		return validator.CodeHasOrder(), nil
+	}
+
+	if len(val.HasSequence) > 0 {
+		return buildHasSequenceValidators(val.HasSequence)
 	}
 
 	return nil, errors.New("validator not specified")
@@ -134,4 +139,17 @@ func buildParityValidators(data *yamlValidatorParity) ([]domain.Validator, error
 	}
 
 	return nil, errors.New("parity checker has nothing to check")
+}
+
+func buildHasSequenceValidators(order string) ([]domain.Validator, error) {
+	switch order {
+	case "any":
+		return validator.HasAnySequence(), nil
+	case "asc":
+		return validator.HasSequence(validator.Ascending), nil
+	case "desc":
+		return validator.HasSequence(validator.Descending), nil
+	default:
+		return nil, fmt.Errorf("unknown order %s", order)
+	}
 }

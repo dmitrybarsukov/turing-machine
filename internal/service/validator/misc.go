@@ -82,3 +82,46 @@ func (c orderStrictChecker) Validate(code domain.Code) bool {
 func (c orderStrictChecker) String() string {
 	return fmt.Sprintf("code is %v", c.Order)
 }
+
+type hasSequenceChecker struct {
+	Order  Order
+	Result bool
+}
+
+func (c hasSequenceChecker) Validate(code domain.Code) bool {
+	hasSequence := false
+	expectedDiff := getExpectedSequenceDiff(c.Order)
+
+	for i := 0; i < domain.CodeLength-1; i++ {
+		diff := code[i+1] - code[i]
+		if diff == expectedDiff {
+			hasSequence = true
+		}
+	}
+
+	return hasSequence == c.Result
+}
+
+func (c hasSequenceChecker) String() string {
+	return fmt.Sprintf("has %v sequence", c.Order)
+}
+
+type hasAnySequenceChecker struct {
+	Result bool
+}
+
+func (c hasAnySequenceChecker) Validate(code domain.Code) bool {
+	hasSequence := false
+	for i := 0; i < domain.CodeLength-1; i++ {
+		diff := code[i+1] - code[i]
+		if diff == 1 || diff == -1 {
+			hasSequence = true
+		}
+	}
+
+	return hasSequence == c.Result
+}
+
+func (c hasAnySequenceChecker) String() string {
+	return fmt.Sprintf("has sequence")
+}

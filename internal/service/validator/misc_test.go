@@ -115,3 +115,73 @@ func TestOrderStrictChecker(t *testing.T) {
 		tt.test(522, true)
 	})
 }
+
+func TestHasSequenceChecker(t *testing.T) {
+	t.Run("has asc sequence", func(t *testing.T) {
+		tt := newTester(t, hasSequenceChecker{Order: Ascending, Result: true})
+
+		tt.test(435, false)
+		tt.test(322, false)
+		tt.test(333, false)
+		tt.test(432, false)
+		tt.test(345, true)
+		tt.test(455, true)
+	})
+
+	t.Run("not has asc sequence", func(t *testing.T) {
+		tt := newTester(t, hasSequenceChecker{Order: Ascending, Result: false})
+
+		tt.test(435, true)
+		tt.test(322, true)
+		tt.test(333, true)
+		tt.test(432, true)
+		tt.test(345, false)
+		tt.test(455, false)
+	})
+
+	t.Run("has desc sequence", func(t *testing.T) {
+		tt := newTester(t, hasSequenceChecker{Order: Descending, Result: true})
+
+		tt.test(435, true)
+		tt.test(321, true)
+		tt.test(333, false)
+		tt.test(432, true)
+		tt.test(345, false)
+		tt.test(522, false)
+	})
+
+	t.Run("not has desc sequence", func(t *testing.T) {
+		tt := newTester(t, hasSequenceChecker{Order: Descending, Result: false})
+
+		tt.test(435, false)
+		tt.test(321, false)
+		tt.test(333, true)
+		tt.test(432, false)
+		tt.test(345, true)
+		tt.test(522, true)
+	})
+}
+
+func TestHasAnySequenceChecker(t *testing.T) {
+	t.Run("has sequence", func(t *testing.T) {
+		tt := newTester(t, hasAnySequenceChecker{Result: true})
+
+		tt.test(435, true)
+		tt.test(322, true)
+		tt.test(333, false)
+		tt.test(432, true)
+		tt.test(135, false)
+		tt.test(455, true)
+	})
+
+	t.Run("not has sequence", func(t *testing.T) {
+		tt := newTester(t, hasAnySequenceChecker{Result: false})
+
+		tt.test(435, false)
+		tt.test(322, false)
+		tt.test(333, true)
+		tt.test(432, false)
+		tt.test(345, false)
+		tt.test(455, false)
+	})
+}
