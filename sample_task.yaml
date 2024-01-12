@@ -1,0 +1,15 @@
+validators:
+  A:
+    compare:
+      item: triangle
+      target: circle
+
+  B:
+    parity:
+      item: square
+
+  C:
+    greatest_item:
+
+  D:
+    has_order:

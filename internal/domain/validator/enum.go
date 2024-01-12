@@ -25,18 +25,18 @@ type Order int
 
 const (
 	Ascending Order = iota
-	Unordered
+	None
 	Descending
 )
 
 func (o Order) String() string {
 	switch o {
 	case Ascending:
-		return "ascending"
-	case Unordered:
-		return "unordered"
+		return "asc"
+	case None:
+		return "none"
 	case Descending:
-		return "descending"
+		return "desc"
 	default:
 		return "?"
 	}
@@ -63,6 +63,8 @@ func (p Parity) String() string {
 		return "?"
 	}
 }
+
+// TODO get rid of this shit
 
 type Count int
 

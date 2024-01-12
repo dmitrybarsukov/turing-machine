@@ -50,7 +50,7 @@ func getOrder(arr []int) Order {
 		return Descending
 	}
 
-	return Unordered
+	return None
 }
 
 func getParity(value int) Parity {

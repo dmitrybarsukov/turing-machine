@@ -35,9 +35,9 @@ func (c CodeItem) String() string {
 	}
 }
 
-const codeLength = 3
+const CodeLength = 3
 
-type Code [codeLength]int
+type Code [CodeLength]int
 
 func (c Code) Get(item CodeItem) int {
 	return c[item.Index()]

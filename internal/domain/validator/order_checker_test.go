@@ -25,8 +25,8 @@ func TestOrderChecker(t *testing.T) {
 		tt.test(522, false)
 	})
 
-	t.Run("Chaotic", func(t *testing.T) {
-		tt := newTester(t, orderChecker{result: Unordered})
+	t.Run("None", func(t *testing.T) {
+		tt := newTester(t, orderChecker{result: None})
 
 		tt.test(435, true)
 		tt.test(321, false)
