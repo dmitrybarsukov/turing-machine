@@ -9,50 +9,45 @@ import (
 
 func buildValidators(validator yamlValidator) ([]domain.Validator, error) {
 	if validator.Compare != nil {
-		return buildCompareValidators(validator.Compare, validator.Clues)
+		return buildCompareValidators(validator.Compare)
 	}
 
 	if validator.Counter != nil {
-		return buildCounterValidators(validator.Counter, validator.Clues)
+		return buildCounterValidators(validator.Counter)
 	}
 
 	if validator.Parity != nil {
-		return buildParityValidators(validator.Parity, validator.Clues)
+		return buildParityValidators(validator.Parity)
 	}
 
 	if validator.HasMoreParity {
-		return buildHasMoreParityValidators(validator.Clues)
+		return buildHasMoreParityValidators()
 	}
 
 	if validator.HasRepetitions {
-		return buildHasRepetitionsValidators(validator.Clues)
+		return buildHasRepetitionsValidators()
 	}
 
 	if validator.HasPair {
-		return buildHasPairValidators(validator.Clues)
+		return buildHasPairValidators()
 	}
 
 	if validator.GreatestItem {
-		return buildGreatestItemValidators(validator.Clues)
+		return buildGreatestItemValidators()
 	}
 
 	if validator.LeastItem {
-		return buildLeastItemValidators(validator.Clues)
+		return buildLeastItemValidators()
 	}
 
 	if validator.HasOrder {
-		return buildHasOrderValidators(validator.Clues)
+		return buildHasOrderValidators()
 	}
 
 	return nil, errors.New("validator not specified")
 }
 
-func buildCompareValidators(data *yamlValidatorCompare, clues []string) ([]domain.Validator, error) {
-	compareVariants, err := parseVariants(clues, mappingCompare)
-	if err != nil {
-		return nil, err
-	}
-
+func buildCompareValidators(data *yamlValidatorCompare) ([]domain.Validator, error) {
 	if len(data.Item) > 0 {
 		item, err := parseEnum(data.Item, mappingCodeItem)
 		if err != nil {
@@ -60,11 +55,11 @@ func buildCompareValidators(data *yamlValidatorCompare, clues []string) ([]domai
 		}
 
 		if targetItem, err := parseEnum(data.Target, mappingCodeItem); err == nil {
-			return validator.ItemComparedToOtherItem(item, targetItem, compareVariants), nil
+			return validator.ItemComparedToOtherItem(item, targetItem, allCompare), nil
 		}
 
 		if targetNumber, err := strconv.Atoi(data.Target); err == nil {
-			return validator.ItemComparedToConst(item, targetNumber, compareVariants), nil
+			return validator.ItemComparedToConst(item, targetNumber, allCompare), nil
 		}
 
 		return nil, errors.New("failed to recognize target")
@@ -82,7 +77,7 @@ func buildCompareValidators(data *yamlValidatorCompare, clues []string) ([]domai
 		}
 
 		if targetNumber, err := strconv.Atoi(data.Target); err == nil {
-			return validator.ItemsSumComparedToConst(items, targetNumber, compareVariants), nil
+			return validator.ItemsSumComparedToConst(items, targetNumber, allCompare), nil
 		}
 
 		return nil, errors.New("failed to recognize target")
@@ -91,14 +86,9 @@ func buildCompareValidators(data *yamlValidatorCompare, clues []string) ([]domai
 	return nil, errors.New("comparator has nothing to compare")
 }
 
-func buildCounterValidators(data *yamlValidatorCounter, clues []string) ([]domain.Validator, error) {
-	countVariants, err := parseVariants(clues, mappingCount)
-	if err != nil {
-		return nil, err
-	}
-
+func buildCounterValidators(data *yamlValidatorCounter) ([]domain.Validator, error) {
 	if data.Number != 0 {
-		return validator.CountOfNumber(data.Number, countVariants), nil
+		return validator.CountOfNumber(data.Number, allCount), nil
 	}
 
 	if data.Parity != "" {
@@ -107,84 +97,49 @@ func buildCounterValidators(data *yamlValidatorCounter, clues []string) ([]domai
 			return nil, err
 		}
 
-		return validator.CountOfParity(parity, countVariants), nil
+		return validator.CountOfParity(parity, allCount), nil
 	}
 
 	return nil, errors.New("counter has nothing to count")
 }
 
-func buildParityValidators(data *yamlValidatorParity, clues []string) ([]domain.Validator, error) {
-	parityVariants, err := parseVariants(clues, mappingParity)
-	if err != nil {
-		return nil, err
-	}
-
+func buildParityValidators(data *yamlValidatorParity) ([]domain.Validator, error) {
 	if len(data.Item) > 0 {
 		item, err := parseEnum(data.Item, mappingCodeItem)
 		if err != nil {
 			return nil, err
 		}
 
-		return validator.ItemHasParity(item, parityVariants), nil
+		return validator.ItemHasParity(item, allParity), nil
 	}
 
 	if data.Sum {
-		return validator.SumHasParity(parityVariants), nil
+		return validator.SumHasParity(allParity), nil
 	}
 
 	return nil, errors.New("parity checker has nothing to check")
 }
 
-func buildHasMoreParityValidators(clues []string) ([]domain.Validator, error) {
-	parityVariants, err := parseVariants(clues, mappingParity)
-	if err != nil {
-		return nil, err
-	}
-
-	return validator.HasMoreNumbersWithParity(parityVariants), nil
+func buildHasMoreParityValidators() ([]domain.Validator, error) {
+	return validator.HasMoreNumbersWithParity(allParity), nil
 }
 
-func buildHasRepetitionsValidators(clues []string) ([]domain.Validator, error) {
-	countVariants, err := parseVariants(clues, mappingCount)
-	if err != nil {
-		return nil, err
-	}
-
-	return validator.HasSomeRepeatingNumbers(countVariants), nil
+func buildHasRepetitionsValidators() ([]domain.Validator, error) {
+	return validator.HasSomeRepeatingNumbers(allCount), nil
 }
 
-func buildHasPairValidators(clues []string) ([]domain.Validator, error) {
-	boolVariants, err := parseVariants(clues, mappingBool)
-	if err != nil {
-		return nil, err
-	}
-
-	return validator.PairOfNumbersExist(boolVariants), nil
+func buildHasPairValidators() ([]domain.Validator, error) {
+	return validator.PairOfNumbersExist(allBool), nil
 }
 
-func buildGreatestItemValidators(clues []string) ([]domain.Validator, error) {
-	codeItemVariants, err := parseVariants(clues, mappingCodeItem)
-	if err != nil {
-		return nil, err
-	}
-
-	return validator.OneItemIsDifferent(validator.More, codeItemVariants), nil
+func buildGreatestItemValidators() ([]domain.Validator, error) {
+	return validator.OneItemIsDifferent(validator.More, allCodeItem), nil
 }
 
-func buildLeastItemValidators(clues []string) ([]domain.Validator, error) {
-	codeItemVariants, err := parseVariants(clues, mappingCodeItem)
-	if err != nil {
-		return nil, err
-	}
-
-	return validator.OneItemIsDifferent(validator.Less, codeItemVariants), nil
+func buildLeastItemValidators() ([]domain.Validator, error) {
+	return validator.OneItemIsDifferent(validator.Less, allCodeItem), nil
 }
 
-func buildHasOrderValidators(clues []string) ([]domain.Validator, error) {
-	orderVariants, err := parseVariants(clues, mappingOrder)
-	if err != nil {
-		return nil, err
-	}
-
-	return validator.CodeIsOrdered(orderVariants), nil
+func buildHasOrderValidators() ([]domain.Validator, error) {
+	return validator.CodeIsOrdered(allOrder), nil
 }

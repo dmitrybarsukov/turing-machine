@@ -63,14 +63,3 @@ func (p Parity) String() string {
 		return "?"
 	}
 }
-
-// TODO get rid of this shit
-
-type Count int
-
-const (
-	Zero Count = iota
-	One
-	Two
-	Three
-)

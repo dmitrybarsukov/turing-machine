@@ -11,10 +11,10 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
-func ParseHyperMachine(reader io.Reader) (turing.HyperMachine, error) {
+func Parse(reader io.Reader) (ParseResult, error) {
 	root, err := parseYaml(reader)
 	if err != nil {
-		return turing.HyperMachine{}, err
+		return ParseResult{}, err
 	}
 
 	machine := turing.HyperMachine{
@@ -23,32 +23,42 @@ func ParseHyperMachine(reader io.Reader) (turing.HyperMachine, error) {
 	}
 
 	for key, validator := range root.Validators {
-		if validator.Disabled {
-			continue
-		}
-
 		if len(key) > 1 {
-			return machine, fmt.Errorf("validator '%s' has too long name", key)
+			return ParseResult{}, fmt.Errorf("validator '%s' has too long name", key)
 		}
 
 		letter := unicode.ToUpper([]rune(key)[0])
 		if letter < 'A' || letter > 'Z' {
-			return machine, fmt.Errorf("validator '%s' has wrong name", key)
+			return ParseResult{}, fmt.Errorf("validator '%s' has wrong name", key)
 		}
 
 		validators, err := buildValidators(validator)
 		if err != nil {
-			return machine, fmt.Errorf("validator '%s' failed build: %w", key, err)
+			return ParseResult{}, fmt.Errorf("validator '%s' failed build: %w", key, err)
 		}
 
 		machine.Validators[letter] = validators
 	}
 
 	if len(machine.Validators) == 0 {
-		return machine, errors.New("no validators specified")
+		return ParseResult{}, errors.New("no validators specified")
 	}
 
-	return machine, nil
+	tests := make([]Test, 0, len(root.Tests)*3)
+	for codeInt, checks := range root.Tests {
+		for key, result := range checks {
+			tests = append(tests, Test{
+				Code:      domain.Code{codeInt / 100 % 10, codeInt / 10 % 10, codeInt % 10},
+				Validator: unicode.ToUpper([]rune(key)[0]),
+				Result:    result,
+			})
+		}
+	}
+
+	return ParseResult{
+		HyperMachine: machine,
+		Tests:        tests,
+	}, nil
 }
 
 func parseYaml(reader io.Reader) (yamlRoot, error) {

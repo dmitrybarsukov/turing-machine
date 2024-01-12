@@ -6,7 +6,7 @@ import (
 
 func TestCountOfNumber(t *testing.T) {
 	t.Run("has 3 of '3'", func(t *testing.T) {
-		tt := newTester(t, CountOfNumber(3, []Count{3})[0])
+		tt := newTester(t, CountOfNumber(3, []int{3})[0])
 
 		tt.test(155, false)
 		tt.test(322, false)
@@ -16,7 +16,7 @@ func TestCountOfNumber(t *testing.T) {
 	})
 
 	t.Run("has 2 of '2'", func(t *testing.T) {
-		tt := newTester(t, CountOfNumber(2, []Count{2})[0])
+		tt := newTester(t, CountOfNumber(2, []int{2})[0])
 
 		tt.test(155, false)
 		tt.test(244, false)
@@ -27,7 +27,7 @@ func TestCountOfNumber(t *testing.T) {
 	})
 
 	t.Run("has 1 of '5'", func(t *testing.T) {
-		tt := newTester(t, CountOfNumber(5, []Count{1})[0])
+		tt := newTester(t, CountOfNumber(5, []int{1})[0])
 
 		tt.test(155, false)
 		tt.test(244, false)
@@ -37,7 +37,7 @@ func TestCountOfNumber(t *testing.T) {
 	})
 
 	t.Run("has 0 of '3'", func(t *testing.T) {
-		tt := newTester(t, CountOfNumber(3, []Count{0})[0])
+		tt := newTester(t, CountOfNumber(3, []int{0})[0])
 
 		tt.test(155, true)
 		tt.test(244, true)
@@ -49,7 +49,7 @@ func TestCountOfNumber(t *testing.T) {
 
 func TestCountOfParity(t *testing.T) {
 	t.Run("has 3 of odd", func(t *testing.T) {
-		tt := newTester(t, CountOfParity(Odd, []Count{3})[0])
+		tt := newTester(t, CountOfParity(Odd, []int{3})[0])
 
 		tt.test(155, true)
 		tt.test(322, false)
@@ -59,7 +59,7 @@ func TestCountOfParity(t *testing.T) {
 	})
 
 	t.Run("has 2 of even", func(t *testing.T) {
-		tt := newTester(t, CountOfParity(Even, []Count{2})[0])
+		tt := newTester(t, CountOfParity(Even, []int{2})[0])
 
 		tt.test(155, false)
 		tt.test(322, true)
@@ -69,7 +69,7 @@ func TestCountOfParity(t *testing.T) {
 	})
 
 	t.Run("has 1 of even", func(t *testing.T) {
-		tt := newTester(t, CountOfParity(Even, []Count{1})[0])
+		tt := newTester(t, CountOfParity(Even, []int{1})[0])
 
 		tt.test(155, false)
 		tt.test(322, false)
@@ -103,7 +103,7 @@ func TestParityComparator(t *testing.T) {
 
 func TestRepetitionCounter(t *testing.T) {
 	t.Run("has no repetitions", func(t *testing.T) {
-		tt := newTester(t, HasSomeRepeatingNumbers([]Count{0})[0])
+		tt := newTester(t, HasSomeRepeatingNumbers([]int{0})[0])
 
 		tt.test(155, false)
 		tt.test(322, false)
@@ -113,7 +113,7 @@ func TestRepetitionCounter(t *testing.T) {
 	})
 
 	t.Run("has 1 repetition", func(t *testing.T) {
-		tt := newTester(t, HasSomeRepeatingNumbers([]Count{1})[0])
+		tt := newTester(t, HasSomeRepeatingNumbers([]int{1})[0])
 
 		tt.test(155, true)
 		tt.test(322, true)

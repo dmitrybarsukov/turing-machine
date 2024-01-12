@@ -2,7 +2,7 @@ package parser
 
 type yamlRoot struct {
 	Validators map[string]yamlValidator `yaml:"validators"`
-	Clues      []string                 `yaml:"clues"`
+	Tests      map[int]map[string]bool  `yaml:"tests"`
 }
 
 type yamlValidator struct {
@@ -15,9 +15,6 @@ type yamlValidator struct {
 	GreatestItem   bool                  `yaml:"greatest_item"`
 	LeastItem      bool                  `yaml:"least_item"`
 	HasOrder       bool                  `yaml:"has_order"`
-
-	Disabled bool     `yaml:"disabled"`
-	Clues    []string `yaml:"clues"`
 }
 
 type yamlValidatorCompare struct {

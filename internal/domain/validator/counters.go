@@ -7,41 +7,55 @@ import (
 	"github.com/samber/lo"
 )
 
-type countOfPredicateChecker struct {
-	Predicate   func(i int) bool
-	Description string
+type countOfNumberChecker struct {
+	Number int
 
-	count Count
+	count int
 }
 
-func (c countOfPredicateChecker) Validate(code domain.Code) bool {
-	return lo.CountBy(code[:], c.Predicate) == int(c.count)
+func (c countOfNumberChecker) Validate(code domain.Code) bool {
+	return lo.Count(code[:], c.Number) == c.count
 }
 
-func (c countOfPredicateChecker) String() string {
-	return fmt.Sprintf("contains %d of %s", c.count, c.Description)
+func (c countOfNumberChecker) String() string {
+	return fmt.Sprintf("contains %d of '%d'", c.count, c.Number)
 }
 
-func (c countOfPredicateChecker) WithValue(value Count) domain.Validator {
+func (c countOfNumberChecker) WithValue(value int) domain.Validator {
 	c.count = value
 	return c
 }
 
-func CountOfNumber(value int, variants []Count) []domain.Validator {
-	return makeValidators[Count](countOfPredicateChecker{
-		Predicate: func(i int) bool {
-			return i == value
-		},
-		Description: fmt.Sprintf("'%d'", value),
+func CountOfNumber(value int, variants []int) []domain.Validator {
+	return makeValidators[int](countOfNumberChecker{
+		Number: value,
 	}, variants)
 }
 
-func CountOfParity(parity Parity, variants []Count) []domain.Validator {
-	return makeValidators[Count](countOfPredicateChecker{
-		Predicate: func(i int) bool {
-			return getParity(i) == parity
-		},
-		Description: fmt.Sprintf("%v numbers", parity),
+type countOfParityChecker struct {
+	Parity Parity
+
+	count int
+}
+
+func (c countOfParityChecker) Validate(code domain.Code) bool {
+	return lo.CountBy(code[:], func(i int) bool {
+		return getParity(i) == c.Parity
+	}) == c.count
+}
+
+func (c countOfParityChecker) String() string {
+	return fmt.Sprintf("contains %d of %v numbers", c.count, c.Parity)
+}
+
+func (c countOfParityChecker) WithValue(value int) domain.Validator {
+	c.count = value
+	return c
+}
+
+func CountOfParity(parity Parity, variants []int) []domain.Validator {
+	return makeValidators[int](countOfParityChecker{
+		Parity: parity,
 	}, variants)
 }
 
@@ -58,7 +72,7 @@ func (c parityCountComparator) Validate(code domain.Code) bool {
 }
 
 func (c parityCountComparator) String() string {
-	return fmt.Sprintf("has more %s than %s numbers", c.result, c.result.not())
+	return fmt.Sprintf("more %s numbers", c.result)
 }
 
 func (c parityCountComparator) WithValue(value Parity) domain.Validator {
@@ -71,7 +85,7 @@ func HasMoreNumbersWithParity(variants []Parity) []domain.Validator {
 }
 
 type repetitionCounter struct {
-	result Count
+	result int
 }
 
 func (c repetitionCounter) Validate(code domain.Code) bool {
@@ -95,13 +109,13 @@ func (c repetitionCounter) String() string {
 	return fmt.Sprintf("has %d repeating numbers", c.result+1)
 }
 
-func (c repetitionCounter) WithValue(value Count) domain.Validator {
+func (c repetitionCounter) WithValue(value int) domain.Validator {
 	c.result = value
 	return c
 }
 
-func HasSomeRepeatingNumbers(variants []Count) []domain.Validator {
-	return makeValidators[Count](repetitionCounter{}, variants)
+func HasSomeRepeatingNumbers(variants []int) []domain.Validator {
+	return makeValidators[int](repetitionCounter{}, variants)
 }
 
 type hasPairOfSameNumbersChecker struct {

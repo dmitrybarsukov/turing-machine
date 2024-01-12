@@ -15,35 +15,41 @@ var mappingCodeItem = map[string]domain.CodeItem{
 	"square":   domain.CodeItemSquare,
 	"circle":   domain.CodeItemCircle,
 }
+var allCodeItem = lo.Values(mappingCodeItem)
 
 var mappingCompare = map[string]validator.Compare{
 	"less":  validator.Less,
 	"equal": validator.Equal,
 	"more":  validator.More,
 }
+var allCompare = lo.Values(mappingCompare)
 
 var mappingOrder = map[string]validator.Order{
 	"asc":  validator.Ascending,
 	"none": validator.None,
 	"desc": validator.Descending,
 }
+var allOrder = lo.Values(mappingOrder)
 
 var mappingParity = map[string]validator.Parity{
 	"even": validator.Even,
 	"odd":  validator.Odd,
 }
+var allParity = lo.Values(mappingParity)
 
-var mappingCount = map[string]validator.Count{
-	"0": validator.Zero,
-	"1": validator.One,
-	"2": validator.Two,
-	"3": validator.Three,
+var mappingCount = map[string]int{
+	"0": 0,
+	"1": 1,
+	"2": 2,
+	"3": 3,
 }
+var allCount = lo.Values(mappingCount)
 
 var mappingBool = map[string]bool{
 	"false": false,
 	"true":  true,
 }
+var allBool = lo.Values(mappingBool)
 
 func parseEnum[T comparable](value string, mapping map[string]T) (T, error) {
 	item, ok := mapping[value]

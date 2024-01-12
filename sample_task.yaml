@@ -1,15 +1,73 @@
+squareComparedTo3: &squareComparedTo3
+  compare:
+    item: square
+    target: 3
+
+squareComparedTo4: &squareComparedTo4
+  compare:
+    item: square
+    target: 4
+
+triangleComparedTo3: &triangleComparedTo3
+  compare:
+    item: triangle
+    target: 3
+
+squareParity: &squareParity
+  parity:
+    item: square
+
+circleParity: &circleParity
+  parity:
+    item: circle
+
+countOf1: &countOf1
+  counter:
+    number: 1
+
+countOf3: &countOf3
+  counter:
+    number: 3
+
+countOf4: &countOf4
+  counter:
+    number: 4
+
+oneGreaterThanOther: &oneGreaterThanOther
+  greatest_item: true
+
+oneLessThanOther: &oneLessThanOther
+  least_item: true
+
+countOfEven: &countOfEven
+  counter:
+    parity: even
+
+totalSumParity: &totalSumParity
+  parity:
+    sum: true
+
+triangleComparedToSquare: &triangleComparedToSquare
+  compare:
+    item: triangle
+    target: square
+
+parityRatio: &parityRatio
+  has_more_parity: true
+
+
 validators:
   A:
-    compare:
-      item: triangle
-      target: circle
+    <<: *squareComparedTo3
 
   B:
-    parity:
-      item: square
+    <<: *squareParity
 
   C:
-    greatest_item:
+    <<: *countOf4
 
   D:
-    has_order:
+    <<: *parityRatio
+
+
+tests:
