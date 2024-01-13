@@ -1,43 +1,59 @@
-squareComparedTo3: &squareComparedTo3
-  compare:
-    item: square
-    target: 3
-
-squareComparedTo4: &squareComparedTo4
-  compare:
-    item: square
-    target: 4
-
-triangleComparedTo3: &triangleComparedTo3
+compareTriangleTo3: &compareTriangleTo3
   compare:
     item: triangle
     target: 3
 
-squareParity: &squareParity
+compareTriangleTo1: &compareTriangleTo1
+  compare:
+    item: triangle
+    target: 1
+
+anyPairCompare: &anyPairCompare
+  compare:
+    any_pair: true
+
+parityOfTriangle: &parityOfTriangle
+  parity:
+    item: triangle
+
+parityOfSquare: &parityOfSquare
   parity:
     item: square
 
-circleParity: &circleParity
+parityOfCircle: &parityOfCircle
   parity:
     item: circle
 
-countOf1: &countOf1
+countOfNumber1: &countOfNumber1
   count:
     number: 1
 
-countOf3: &countOf3
+countOfNumber3: &countOfNumber3
   count:
     number: 3
 
-countOf4: &countOf4
+countOfNumber4: &countOfNumber4
   count:
     number: 4
 
-oneGreaterThanOther: &oneGreaterThanOther
+countOfNumber3Or4: &countOfNumber3Or4
+  count:
+    one_of: [3, 4]
+
+oneNumberGreatest: &oneNumberGreatest
   greatest_item: true
 
-oneLessThanOther: &oneLessThanOther
+oneNumberLeast: &oneNumberLeast
   least_item: true
+
+oneNumberOutstanding: &oneNumberOutstanding
+  outstanding_item: true
+
+hasPair: &hasPair
+  has_pair: true
+
+hasOrder: &hasOrder
+  has_order: true
 
 countOfEven: &countOfEven
   count:
@@ -47,27 +63,65 @@ totalSumParity: &totalSumParity
   parity:
     sum: true
 
-triangleComparedToSquare: &triangleComparedToSquare
+compareTriangleToSquare: &compareTriangleToSquare
   compare:
     item: triangle
     target: square
 
-parityRatio: &parityRatio
-  has_more_parity: true
+compareTriangleToCircle: &compareTriangleToCircle
+  compare:
+    item: triangle
+    target: circle
+
+compareSquareToCircle: &compareSquareToCircle
+  compare:
+    item: square
+    target: circle
+
+majorParity: &majorParity
+  major_parity: true
+
+sumOfAllComparedTo6: &sumOfAllComparedTo6
+  compare:
+    sum: [triangle, square, circle]
+    target: 6
+
+sumOfTriangleAndSquareComparedTo6: &sumOfTriangleAndSquareComparedTo6
+  compare:
+    sum: [triangle, square]
+    target: 6
+
+parityOfAllSum: &parityOfAllSum
+  parity:
+    sum: true
+
+anyItemParity: &anyItemParity
+  parity:
+    any_item: true
+
+countOfRepetitions: &countOfRepetitions
+  count:
+    repetitions: true
 
 
 validators:
-  A:
-    <<: *squareComparedTo3
-
-  B:
-    <<: *squareParity
-
-  C:
-    <<: *countOf4
-
-  D:
-    <<: *parityRatio
-
+  A: *countOfNumber1
+  B: *majorParity
+  C: *parityOfAllSum
+  D: *sumOfTriangleAndSquareComparedTo6
+  E: *hasPair
+  F: *hasOrder
 
 tests:
+  333:
+    D: false
+    A: false
+    F: true
+
+  351:
+    E: true
+    D: false
+    B: true
+
+  315:
+    A: true
