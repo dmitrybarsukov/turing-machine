@@ -1,4 +1,4 @@
-module turing-machine
+module github.com/dmitrybarsukov/turing-machine
 
 go 1.21
 
