@@ -2,7 +2,8 @@ package validator
 
 import (
 	"testing"
-	"turing-machine/internal/domain"
+
+	"github.com/dmitrybarsukov/turing-machine/internal/domain"
 )
 
 func TestMajorParityChecker(t *testing.T) {

@@ -3,7 +3,8 @@ package validator
 import (
 	"fmt"
 	"strings"
-	"turing-machine/internal/domain"
+
+	"github.com/dmitrybarsukov/turing-machine/internal/domain"
 
 	"github.com/samber/lo"
 )

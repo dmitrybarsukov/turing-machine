@@ -4,7 +4,8 @@ import (
 	"fmt"
 	"sort"
 	"strings"
-	"turing-machine/internal/domain"
+
+	"github.com/dmitrybarsukov/turing-machine/internal/domain"
 
 	"github.com/samber/lo"
 )

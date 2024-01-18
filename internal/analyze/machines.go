@@ -2,8 +2,9 @@ package analyze
 
 import (
 	"sort"
-	"turing-machine/internal/domain"
-	"turing-machine/internal/service/turing"
+
+	"github.com/dmitrybarsukov/turing-machine/internal/domain"
+	"github.com/dmitrybarsukov/turing-machine/internal/service/turing"
 
 	"github.com/samber/lo"
 )

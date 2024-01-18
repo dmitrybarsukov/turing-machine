@@ -1,14 +1,14 @@
 package parser
 
 import (
-	"turing-machine/internal/domain"
-	turing2 "turing-machine/internal/service/turing"
+	"github.com/dmitrybarsukov/turing-machine/internal/domain"
+	"github.com/dmitrybarsukov/turing-machine/internal/service/turing"
 
 	"github.com/samber/lo"
 )
 
 type ParseResult struct {
-	HyperMachine turing2.HyperMachine
+	HyperMachine turing.HyperMachine
 	Tests        []Test
 }
 
@@ -18,9 +18,9 @@ type Test struct {
 	Result    bool
 }
 
-func (t Test) FilterMachines(machines []turing2.Machine) []turing2.Machine {
+func (t Test) FilterMachines(machines []turing.Machine) []turing.Machine {
 	if t.Result {
-		return lo.Filter(machines, func(it turing2.Machine, _ int) bool {
+		return lo.Filter(machines, func(it turing.Machine, _ int) bool {
 			validator, ok := it.Validators[t.Validator]
 			if !ok {
 				return true
@@ -29,7 +29,7 @@ func (t Test) FilterMachines(machines []turing2.Machine) []turing2.Machine {
 		})
 	}
 
-	return lo.Filter(machines, func(it turing2.Machine, _ int) bool {
+	return lo.Filter(machines, func(it turing.Machine, _ int) bool {
 		validator, ok := it.Validators[t.Validator]
 		if !ok {
 			return true

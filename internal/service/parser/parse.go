@@ -4,9 +4,10 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"turing-machine/internal/domain"
-	"turing-machine/internal/service/turing"
 	"unicode"
+
+	"github.com/dmitrybarsukov/turing-machine/internal/domain"
+	"github.com/dmitrybarsukov/turing-machine/internal/service/turing"
 
 	"gopkg.in/yaml.v3"
 )

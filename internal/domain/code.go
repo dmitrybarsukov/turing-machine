@@ -3,7 +3,8 @@ package domain
 import (
 	"strconv"
 	"strings"
-	"turing-machine/internal/util"
+
+	"github.com/dmitrybarsukov/turing-machine/internal/util"
 
 	"github.com/samber/lo"
 )

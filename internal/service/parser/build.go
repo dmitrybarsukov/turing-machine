@@ -4,8 +4,9 @@ import (
 	"errors"
 	"fmt"
 	"strconv"
-	"turing-machine/internal/domain"
-	"turing-machine/internal/service/validator"
+
+	"github.com/dmitrybarsukov/turing-machine/internal/domain"
+	"github.com/dmitrybarsukov/turing-machine/internal/service/validator"
 )
 
 func buildValidators(val yamlValidator) ([]domain.Validator, error) {

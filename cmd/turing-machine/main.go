@@ -4,10 +4,11 @@ import (
 	"fmt"
 	"os"
 	"sort"
-	"turing-machine/internal/analyze"
-	"turing-machine/internal/domain"
-	"turing-machine/internal/service/parser"
-	"turing-machine/internal/service/turing"
+
+	"github.com/dmitrybarsukov/turing-machine/internal/analyze"
+	"github.com/dmitrybarsukov/turing-machine/internal/domain"
+	"github.com/dmitrybarsukov/turing-machine/internal/service/parser"
+	"github.com/dmitrybarsukov/turing-machine/internal/service/turing"
 
 	"github.com/samber/lo"
 )
