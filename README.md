@@ -74,3 +74,6 @@ If app says `Found solution: 531`, so the solution for game is `531`
 
 ### v1.0
 * Initial version with ~70% of all known validators
+
+### v1.1
+* Improved validator recommendation
