@@ -122,8 +122,9 @@ func recommendCode(machines []turing.Machine, validatorStats []analyze.Validator
 }
 
 func recommendValidator(validatorStats []analyze.ValidatorStats, tests []parser.Test) {
+	const testPerRound = 3
 	lastUsedValidators := make(map[rune]bool)
-	const analyzeLastTests = 3
+	analyzeLastTests := len(tests) % testPerRound
 	for i := 0; i < analyzeLastTests && i < len(tests); i++ {
 		lastUsedValidators[tests[len(tests)-1-i].Validator] = true
 	}
